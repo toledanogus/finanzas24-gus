@@ -30,7 +30,7 @@ export const GeneralesPage = () => {
   const { data, hasError, isLoading } = useFetch(url);
   const navigate = useNavigate();
   const [quincenaOk, setQuincenaOk] = useState("");
-
+const [totalGlobal, setTotalGlobal] = useState(0);
   /* FUNCIONES**************************************************************** */
 
   const handleCheckboxChange = (event) => {
@@ -75,9 +75,9 @@ export const GeneralesPage = () => {
     navigate("/inicio");
   };
 
-  const aGenerales = () => {
-    navigate("/generales");
-  };
+  const sumaGeneralBanamex = () => {
+    setTotalGlobal(Number(totalTemporal2)+total2);
+  }
 
   /* EFECTOS *******************************************************/
   useEffect(() => {
@@ -106,6 +106,11 @@ export const GeneralesPage = () => {
   useEffect(() => {
     setQuincenaOk(quincena);
   }, []);
+
+  useEffect(() => {
+    sumaGeneralBanamex();
+  }, [total2]);
+  
 
   return (
     <>
@@ -202,6 +207,9 @@ export const GeneralesPage = () => {
       <button className="navegacion" onClick={aBanamex}>
         Tarjeta Banamex
       </button>
+
+      <button onClick={sumaGeneralBanamex}>Sumar Totales</button>
+      <div>{`General + Banamex = $${totalGlobal}`}</div>
     </>
   );
 };
