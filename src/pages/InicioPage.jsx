@@ -12,6 +12,8 @@ export const InicioPage = () => {
   const dispatch = useDispatch();
   const [seleccion, setSeleccion] = useState("");
 
+  //-------------------------------------------------------
+
   const onHandleChange = (event) => {
     setSeleccion(event.target.value);
   };
@@ -19,7 +21,7 @@ export const InicioPage = () => {
   const siguiente = () => {
     navigate("/generales");
   };
-
+//-----------------------------------------------------------
   useEffect(() => {
     let mesLocalStorage = localStorage.getItem("mesG");
 
@@ -33,6 +35,8 @@ export const InicioPage = () => {
   useEffect(() => {
     setSeleccion(quincena);
   }, [quincena]);
+
+  //----------------------------------------------------
 
   return (
     <>

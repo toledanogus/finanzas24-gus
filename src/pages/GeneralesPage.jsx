@@ -17,8 +17,15 @@ import { RegistrarGasto } from "./components/RegistrarGasto";
 import { useNavigate } from "react-router-dom";
 
 export const GeneralesPage = () => {
-  const { quincena, conceptos, pagados, redibujar, totalTemporal2 } =
-    useSelector((state) => state.generales);
+  const {
+    meses,
+    quincenas,
+    quincena,
+    conceptos,
+    pagados,
+    redibujar,
+    totalTemporal2,
+  } = useSelector((state) => state.generales);
   const dispatch = useDispatch();
   const [checkedItems, setCheckedItems] = useState(new Set());
   //const [total1, setTotal1] = useState(0);
@@ -31,6 +38,7 @@ export const GeneralesPage = () => {
   const navigate = useNavigate();
   const [quincenaOk, setQuincenaOk] = useState("");
   const [totalGlobal, setTotalGlobal] = useState(0);
+  let qMes;
   /* FUNCIONES**************************************************************** */
 
   const handleCheckboxChange = (event) => {
@@ -80,16 +88,34 @@ export const GeneralesPage = () => {
   };
 
   const mesSiguiente = () => {
-    
-  }
+    const mesActual = localStorage.getItem("mesG");
+    const completos = meses.flatMap((mes) =>
+      quincenas.map((quincena) => `${quincena}${mes}`)
+    );
+    completos.forEach((item, indice) => {
+      if (mesActual === item && completos[indice+1]) {
+        localStorage.setItem("mesG", completos[indice+1]);
+        window.location.reload();
+      }
+    });
+};
 
   const mesAnterior = () => {
-  
-  }
+    const mesActual = localStorage.getItem("mesG");
+    const completos = meses.flatMap((mes) =>
+      quincenas.map((quincena) => `${quincena}${mes}`)
+    );
+    completos.forEach((item, indice) => {
+      if (mesActual === item && completos[indice-1]) {
+        localStorage.setItem("mesG", completos[indice-1]);
+        window.location.reload();
+      }
+    });
+  };
 
   /* EFECTOS *******************************************************/
   useEffect(() => {
-    const qMes = localStorage.getItem("mesG");
+    qMes = localStorage.getItem("mesG");
     dispatch(seleccionQuincenaMes(qMes));
   }, []);
 
@@ -122,9 +148,16 @@ export const GeneralesPage = () => {
   return (
     <>
       <div className="adelanteAtras">
-        <button className="aa">&lt;</button>
-        <h3 className="tituloPrincipal">{`Quincena: ${quincena.replace(/(\d+)([a-zA-Z]+)/, "$1º $2")}`}</h3>
-        <button className="aa">&gt;</button>
+        <button className="aa" onClick={mesAnterior}>
+          &lt;
+        </button>
+        <h3 className="tituloPrincipal">{`Quincena: ${quincena.replace(
+          /(\d+)([a-zA-Z]+)/,
+          "$1º $2"
+        )}`}</h3>
+        <button className="aa" onClick={mesSiguiente}>
+          &gt;
+        </button>
       </div>
 
       <table>
