@@ -30,7 +30,7 @@ export const GeneralesPage = () => {
   const { data, hasError, isLoading } = useFetch(url);
   const navigate = useNavigate();
   const [quincenaOk, setQuincenaOk] = useState("");
-const [totalGlobal, setTotalGlobal] = useState(0);
+  const [totalGlobal, setTotalGlobal] = useState(0);
   /* FUNCIONES**************************************************************** */
 
   const handleCheckboxChange = (event) => {
@@ -76,7 +76,15 @@ const [totalGlobal, setTotalGlobal] = useState(0);
   };
 
   const sumaGeneralBanamex = () => {
-    setTotalGlobal(Number(totalTemporal2)+total2);
+    setTotalGlobal(Number(totalTemporal2) + total2);
+  };
+
+  const mesSiguiente = () => {
+    
+  }
+
+  const mesAnterior = () => {
+  
   }
 
   /* EFECTOS *******************************************************/
@@ -109,12 +117,16 @@ const [totalGlobal, setTotalGlobal] = useState(0);
 
   useEffect(() => {
     sumaGeneralBanamex();
-  }, [total2]);
-  
+  }, [total2, redibujar, conceptos, totalTemporal2]);
 
   return (
     <>
-      <h3>{`Quincena: ${quincena.replace(/(\d+)([a-zA-Z]+)/, "$1º $2")}`}</h3>
+      <div className="adelanteAtras">
+        <button className="aa">&lt;</button>
+        <h3 className="tituloPrincipal">{`Quincena: ${quincena.replace(/(\d+)([a-zA-Z]+)/, "$1º $2")}`}</h3>
+        <button className="aa">&gt;</button>
+      </div>
+
       <table>
         <thead>
           <tr>

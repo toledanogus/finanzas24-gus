@@ -58,7 +58,7 @@ button {
   font-weight: bold;
 }
 
-h3 {
+.tituloPrincipal {
   color: #00967d;
   margin-left: auto;
   margin-right: auto;
@@ -76,3 +76,20 @@ select {
   background-color:#db6816;
   margin: 10px;
 }
+
+.adelanteAtras {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.adelanteAtras button,
+.adelanteAtras h3 {
+  margin: 0 5px; /* Espacio entre los elementos */
+}
+
+.aa {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
