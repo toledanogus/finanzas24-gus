@@ -288,7 +288,7 @@ export const BanamexPage = () => {
                     <td>{concepto[1]}</td>
                     <td className="centrado">{`$${concepto[2]}`}</td>
                     <td className="centrado">{concepto[3]}</td>
-                    <td className="centrado">{concepto[8]}</td>
+                    <td>{concepto[8]}</td>
                     <td className="centrado">{`$${concepto[7]}`}</td>
                     <td className="centrado">{`$${mensualidad[indice1]}`}</td>
                     <td className="centrado">{`${concepto[6]}`}</td>
