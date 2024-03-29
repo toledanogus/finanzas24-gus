@@ -1,11 +1,25 @@
 body {
-  background-color: #fffcf9;
+  background-color: #F2B885; /* Cambia el último valor (0.5) para ajustar la transparencia */
   text-align: center;
+  /* background-image: url(./assets/primavera.jpg); */
+}
+
+body::after {
+  background: url(./assets/primavera2.jpeg);
+  background-size: cover ;
+  content: "";
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  opacity: 0.6;
+  z-index: -1;   
 }
 
 table {
   border: 1px solid;
-  background-color: #f5e7d3;
+  background-color: #f2b885ee;
   box-shadow: 4px 4px 10px rgb(109, 106, 106);
   border-radius: 5px;
   padding: 5px;
@@ -19,19 +33,22 @@ th,
 .total {
   text-transform: capitalize;
   padding: 5px;
-  background-color: #f5b82a;
-  color: black;
+  background-color: #59321B;
+  color: rgb(255, 255, 255);
   border: 1px solid;
   border-radius: 5px;
   border-color: black;
+  white-space: nowrap;
+  text-align: center;
 }
 td {
   text-transform: capitalize;
+  white-space: nowrap;
 }
 
 .total {
   color: rgb(255, 255, 255);
-  background-color: #db6816;
+  background-color: #929EA6;
   border-top: 1px solid #000000;
   padding-top: 8px;
   padding-left: 10px;
@@ -40,8 +57,12 @@ td {
 
 .arrow,
 .banamextotal {
-  color: #00967d;
+  color: #2A3340;
   font-weight: bold;
+}
+
+.arrow{
+  color: rgb(42, 54, 83);
 }
 
 input::-webkit-outer-spin-button,
@@ -52,20 +73,20 @@ input::-webkit-inner-spin-button {
 
 button {
   color: rgb(255, 255, 255);
-  background-color: #00967d;
+  background-color: #2A3340;
   border-radius: 4px;
   padding: 4px;
   font-weight: bold;
 }
 
 .tituloPrincipal {
-  color: #00967d;
+  color: #2A3340;
   margin-left: auto;
   margin-right: auto;
 }
 
 .titulotabla {
-  background-color: #83d4a9;
+  background-color: #2A3340;
 }
 
 select {
@@ -73,7 +94,7 @@ select {
 }
 
 .navegacion{
-  background-color:#db6816;
+  background-color:#929EA6;
   margin: 10px;
 }
 
@@ -93,3 +114,24 @@ select {
   padding-right: 20px;
 }
 
+/* .light{
+  background-color:#f5b82a ;
+}
+
+.dark{
+  background-color:black;
+} */
+.noPagado{
+  color: red;
+  font-style: oblique;
+  font-weight: bold;
+}
+
+.centrado{
+  text-align: center;
+  text-transform: none;
+}
+
+.centrado::after{
+  content: "";
+}

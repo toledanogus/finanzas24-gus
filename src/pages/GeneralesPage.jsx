@@ -38,6 +38,7 @@ export const GeneralesPage = () => {
   const navigate = useNavigate();
   const [quincenaOk, setQuincenaOk] = useState("");
   const [totalGlobal, setTotalGlobal] = useState(0);
+  const [theme, setTheme] = useState('light'); 
   let qMes;
   /* FUNCIONES**************************************************************** */
 
@@ -113,6 +114,10 @@ export const GeneralesPage = () => {
     });
   };
 
+  
+    /* const cambiaColor = () => {
+      setTheme('dark')
+  }; */
   /* EFECTOS *******************************************************/
   useEffect(() => {
     qMes = localStorage.getItem("mesG");
@@ -160,7 +165,7 @@ export const GeneralesPage = () => {
         </button>
       </div>
 
-      <table>
+      <table className={theme}>
         <thead>
           <tr>
             <th colSpan="4" id="titulo" className="titulotabla">
@@ -183,7 +188,7 @@ export const GeneralesPage = () => {
                   ? `$${concepto[1].toLocaleString()}`
                   : "—"}
               </td>
-              <td>
+              <td className="centrado">
                 {concepto[2] === 0 ? (
                   <input
                     name={concepto[0]} // Cambiado a concepto[0]
@@ -193,8 +198,8 @@ export const GeneralesPage = () => {
                   />
                 ) : null}
               </td>
-              <td>
-                {concepto[2] ? <span className="arrow">✓</span> : "No pagado"}
+              <td className="centrado">
+                {concepto[2] ? <span className="arrow">✓</span> : <span className="noPagado">x</span>}
               </td>
             </tr>
           ))}
@@ -252,9 +257,12 @@ export const GeneralesPage = () => {
       <button className="navegacion" onClick={aBanamex}>
         Tarjeta Banamex
       </button>
-
+<br />
       <button onClick={sumaGeneralBanamex}>Sumar Totales</button>
       <div>{`General + Banamex = $${totalGlobal}`}</div>
+      <div>
+      {/* <button onClick={cambiaColor}>Negroooo</button> */}
+    </div>
     </>
   );
 };
