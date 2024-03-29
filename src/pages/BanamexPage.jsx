@@ -286,12 +286,12 @@ export const BanamexPage = () => {
                 return (
                   <tr key={index}>
                     <td>{concepto[1]}</td>
-                    <td>{`$ ${concepto[2]}`}</td>
-                    <td>{concepto[3]}</td>
-                    <td>{concepto[8]}</td>
-                    <td>{`$ ${concepto[7]}`}</td>
-                    <td>{`$ ${mensualidad[indice1]}`}</td>
-                    <td>{`${concepto[6]}`}</td>
+                    <td className="centrado">{`$${concepto[2]}`}</td>
+                    <td className="centrado">{concepto[3]}</td>
+                    <td className="centrado">{concepto[8]}</td>
+                    <td className="centrado">{`$${concepto[7]}`}</td>
+                    <td className="centrado">{`$${mensualidad[indice1]}`}</td>
+                    <td className="centrado">{`${concepto[6]}`}</td>
                   </tr>
                 );
               } else {
