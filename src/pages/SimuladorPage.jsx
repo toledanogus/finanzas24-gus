@@ -1,10 +1,8 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
+
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getConceptos,
-  getTotalBanamex,
   sendPagados,
 } from "../store/slices/thunks";
 import {
@@ -16,51 +14,62 @@ import { useFetch } from "../hooks/useFetch";
 import { RegistrarGasto } from "./components/RegistrarGasto";
 import { useNavigate } from "react-router-dom";
 
-export const GeneralesPage = () => {
-  const {
-    meses,
-    quincenas,
-    quincena,
-    conceptos,
-    pagados,
-    redibujar,
-    totalTemporal2,
-  } = useSelector((state) => state.generales);
+
+export const SimuladorPage = () => {
+    const { quincena, conceptos, pagados, redibujar, totalTemporal2, meses, quincenas } =
+    useSelector((state) => state.generales);
   const dispatch = useDispatch();
-  const [checkedItems, setCheckedItems] = useState(new Set());
   //const [total1, setTotal1] = useState(0);
   const [total2, setTotal2] = useState(0);
   // eslint-disable-next-line no-unused-vars
   const [datosCargados, setDatosCargados] = useState(false);
   const [mesLocalStorage, setMesLocalStorage] = useState("1Enero");
-  const [url, setUrl] = useState("./php/test.php");
-  const { data, hasError, isLoading } = useFetch(url);
   const navigate = useNavigate();
   const [quincenaOk, setQuincenaOk] = useState("");
-  const [totalGlobal, setTotalGlobal] = useState(0);
-  const [theme, setTheme] = useState('light'); 
-  let qMes;
+  const [render, setRender] = useState(0);
+  const [checkedItems, setCheckedItems] = useState(new Set());
+  const [resultado, setResultado] = useState(0);
+  const [aSumar, setASumar] = useState([]);
+  
+
   /* FUNCIONES**************************************************************** */
 
   const handleCheckboxChange = (event) => {
-    const { name, checked } = event.target;
+    const { name, checked, value } = event.target;
+  
     if (checked) {
-      setCheckedItems(
-        (prevCheckedItems) => new Set(prevCheckedItems.add(name))
-      );
+      setCheckedItems((prevCheckedItems) => new Set(prevCheckedItems.add(name)));
+      setASumar((prevASumar) => [...prevASumar, Number(value)]);
     } else {
-      const newCheckedItems = new Set(checkedItems);
-      newCheckedItems.delete(name);
-      setCheckedItems(newCheckedItems);
+      setCheckedItems((prevCheckedItems) => {
+        const newCheckedItems = new Set(prevCheckedItems);
+        newCheckedItems.delete(name);
+        return newCheckedItems;
+      });
+  
+      setASumar((prevASumar) => {
+        const index = prevASumar.findIndex((item) => item === Number(value));
+        if (index !== -1) {
+          const newArray = [...prevASumar];
+          newArray.splice(index, 1); // Elimina solo la primera instancia encontrada
+          return newArray;
+        }
+        return prevASumar;
+      });
     }
   };
-
-  /* const CambiarUrl = () => {
-    setUrl("./php/test2.php");
-  }; */
+  
+    
+  const sumarMarcados = () => {
+    const resultadoTemp = aSumar.reduce((acumulador, valor)=>{
+        return acumulador + valor;
+    }, 0);
+    setResultado(resultadoTemp);
+  }
+  
 
   const sumarTotal2 = () => {
-    // eslint-disable-next-line no-unused-vars
+    
     const suma = conceptos.reduce((total, [, cantidad, pagado]) => {
       if (pagado === 0) {
         return total + cantidad;
@@ -70,22 +79,9 @@ export const GeneralesPage = () => {
     setTotal2(suma);
   };
 
-  const enviarPagados = async () => {
-    await dispatch(setPagados({ pagados: Array.from(checkedItems) }));
-    await dispatch(sendPagados());
-    setDatosCargados(false);
-  };
-
-  const aBanamex = () => {
-    navigate("/banamex");
-  };
-
-  const aInicio = () => {
-    navigate("/inicio");
-  };
-
-  const sumaGeneralBanamex = () => {
-    setTotalGlobal(Number(totalTemporal2) + total2);
+  
+  const aGenerales = () => {
+    navigate("/generales");
   };
 
   const mesSiguiente = () => {
@@ -114,17 +110,15 @@ export const GeneralesPage = () => {
     });
   };
 
-  const aSimulador = () => {
-    navigate("/simulador");
+  const resetear = () => {
+    setCheckedItems(new Set());
+    setResultado(0);
+    setASumar([]);
   }
 
-  
-    /* const cambiaColor = () => {
-      setTheme('dark')
-  }; */
   /* EFECTOS *******************************************************/
   useEffect(() => {
-    qMes = localStorage.getItem("mesG");
+    const qMes = localStorage.getItem("mesG");
     dispatch(seleccionQuincenaMes(qMes));
   }, []);
 
@@ -140,19 +134,20 @@ export const GeneralesPage = () => {
 
   useEffect(() => {
     dispatch(getConceptos());
-  }, [checkedItems, redibujar]);
-
-  useEffect(() => {
-    dispatch(getTotalBanamex());
-  }, []);
+    setRender(render+1);
+  }, [redibujar]);
 
   useEffect(() => {
     setQuincenaOk(quincena);
   }, []);
 
   useEffect(() => {
-    sumaGeneralBanamex();
-  }, [total2, redibujar, conceptos, totalTemporal2]);
+    if (aSumar) {
+        sumarMarcados();
+    }
+  }, [checkedItems]);
+
+  
 
   return (
     <>
@@ -168,8 +163,7 @@ export const GeneralesPage = () => {
           &gt;
         </button>
       </div>
-
-      <table className={theme}>
+      <table className="simulador">
         <thead>
           <tr>
             <th colSpan="4" id="titulo" className="titulotabla">
@@ -179,31 +173,28 @@ export const GeneralesPage = () => {
           <tr>
             <th>Concepto</th>
             <th>Cantidad</th>
-            <th>Pagado</th>
-            <th>Estatus</th>
+            <th>A sumar</th>
           </tr>
         </thead>
         <tbody>
           {Object.entries(conceptos).map(([index, concepto]) => (
             <tr key={index}>
-              <td>{concepto[0]}</td>
+              <td><div className="texto-cortado">{concepto[0]}</div></td>
               <td>
                 {concepto[1] && concepto[1]
                   ? `$${concepto[1].toLocaleString()}`
                   : "—"}
               </td>
-              <td className="centrado">
-                {concepto[2] === 0 ? (
+              <td>
+                { (
                   <input
-                    name={concepto[0]} // Cambiado a concepto[0]
+                    name={concepto[0]}
+                    value={concepto[1]} // Cambiado a concepto[1]
                     type="checkbox"
                     onChange={handleCheckboxChange}
                     checked={checkedItems.has(concepto[0])} // Nuevo
                   />
-                ) : null}
-              </td>
-              <td className="centrado">
-                {concepto[2] ? <span className="arrow">✓</span> : <span className="noPagado">x</span>}
+                ) }
               </td>
             </tr>
           ))}
@@ -217,57 +208,23 @@ export const GeneralesPage = () => {
           </tr>
           <tr>
             <td>
-              <button
-                onClick={() => {
-                  enviarPagados().then(() => dispatch(getConceptos()));
-                }}
-              >
-                Registrar Pagos
-              </button>
+              
             </td>
           </tr>
         </tfoot>
       </table>
-
+      
+      
       <table>
-        <thead>
-          <tr>
-            <th colSpan="4">Tarjeta Banamex</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <button onClick={aBanamex}>Banamex</button>{" "}
-            </td>
-            <td className="banamextotal">
-              {totalTemporal2 && totalTemporal2
-                ? `$${totalTemporal2.toLocaleString()}`
-                : null}
-            </td>
-          </tr>
-        </tbody>
+        <tr>
+            <td>Efectivo:</td>
+            <td><span className="negritas">{`$${resultado.toLocaleString()}`}</span></td>
+        </tr>
       </table>
-      {/*  <div>{pagados && pagados}</div>
-      <h2>{data}</h2> */}
-      {/* <button onClick={CambiarUrl}>CambiarUrl</button> */}
-      <RegistrarGasto />
-      {/*  <div>{redibujar}</div>
-      <button onClick={aBanamex}>A Banamex</button> */}
-
-      <button className="navegacion" onClick={aInicio}>
-        Selección de mes
+      <button className="resetear" onClick={resetear}>Resetear</button>
+      <button className="navegacion" onClick={aGenerales}>
+        Gastos
       </button>
-      <button className="navegacion" onClick={aBanamex}>
-        Tarjeta Banamex
-      </button>
-<br />
-      <button onClick={sumaGeneralBanamex}>Sumar Totales</button>
-      <div>{`General + Banamex = $${totalGlobal}`}</div>
-      <div>
-      {<button className="aSimulador" onClick={aSimulador}>Simulador</button>}
-    </div>
-
     </>
   );
-};
+}

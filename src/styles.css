@@ -135,3 +135,7 @@ select {
 .centrado::after{
   content: "";
 }
+
+.negritas{
+  font-weight: bolder;
+}
