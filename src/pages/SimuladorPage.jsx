@@ -70,8 +70,8 @@ export const SimuladorPage = () => {
 
   const sumarTotal2 = () => {
     
-    const suma = conceptos.reduce((total, [, cantidad, pagado]) => {
-      if (pagado === 0) {
+    const suma = conceptos.reduce((total, [concept, cantidad]) => {
+      if (concept) {
         return total + cantidad;
       }
       return total;

@@ -139,3 +139,7 @@ select {
 .negritas{
   font-weight: bolder;
 }
+
+.resetear, .navegacion{
+  padding: 10px;
+}
