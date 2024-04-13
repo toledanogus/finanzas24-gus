@@ -6,7 +6,8 @@ body {
 
 body::after {
   background: url(./assets/primavera2.jpeg);
-  background-size: cover ;
+  background-size: auto;
+  background-attachment: scroll;
   content: "";
   position: fixed;
   top: 0;
